@@ -7,6 +7,7 @@ from PIL import Image
 # enabling mouse fail safe
 pyautogui.FAILSAFE = True
 
+MAX_WAIT_LINK_OPEN = 300
 
 class ZoomAutomator:
 
@@ -21,16 +22,13 @@ class ZoomAutomator:
         time.sleep(3)
         while True:
             open_link = pyautogui.locateOnScreen('images/openlink.png', confidence=0.9)
-            if open_link is not None:
-                pyautogui.click(open_link)
-                break
             open_zoom = pyautogui.locateOnScreen('images/openzoom.png', confidence=0.9)
-            if open_zoom is not None:
+            if open_link is not None:
+                pyautogui.click(open_link)            
+            elif open_zoom is not None:
                 pyautogui.click(open_zoom)
-                break
-            elif (time.time() - start) >= 120:
+            elif (time.time() - start) >= MAX_WAIT_LINK_OPEN:
                 print("Link " + meeting_link + " not opened")
-                break
             time.sleep(3)
 
     def join_meeting_with_id(self, meeting_id, meeting_password):
