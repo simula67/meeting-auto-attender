@@ -44,7 +44,7 @@ def join_meetings(zoom_meetings, zoomautomator):
             continue
 
         zoomautomator.join_meeting(meeting_link=current_meeting[1], meeting_id=current_meeting[2],
-                                   password=current_meeting[3])
+                                   meeting_password=current_meeting[3])
 
 
 if __name__ == '__main__':

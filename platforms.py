@@ -4,7 +4,7 @@ def get_platform():
     platform = Windows()
 
     if os.name != 'nt':
-        raise Exception('Only Windows supported at the moment and this appears not be Windows')
+        raise Exception('Only Windows supported at the moment and this appears to not be Windows')
 
     return platform
 
