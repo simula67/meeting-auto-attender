@@ -6,7 +6,7 @@ import platforms
 import zoom_automator
 import openpyxl
 
-MAX_LATENESS_FOR_MEETING = 300
+MAX_LATENESS_FOR_MEETING = 600
 MEETING_EARLINESS = 60
 
 
@@ -61,4 +61,3 @@ if __name__ == '__main__':
 
     # Cleanup
     print("Done")
-    platform.close_zoom_process()
