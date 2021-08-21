@@ -2,6 +2,10 @@
 
 Python program to automatically join the online Zoom meetings based on the given input in the Excel sheet meetings.xlsx
 
+# Platforms
+
+Windows and Linux
+
 # Input format
 
 The input should be in the given format:
@@ -26,13 +30,11 @@ PIL - https://pillow.readthedocs.io/en/stable/
 
 # Pre-Requirements
 
-1. Windows machine
+1. Zoom app
 
-2. Zoom app
+2. Web browser (chrome, firefox preferred ,make sure it has pop-up enabled to open zoom app)
 
-3. Web browser (chrome, firefox preferred ,make sure it has pop-up enabled to open zoom app)
-
-4. Python - Download and install from https://www.python.org/downloads/
+3. Python - Download and install from https://www.python.org/downloads/
 
 # Steps to use
 
@@ -40,7 +42,7 @@ PIL - https://pillow.readthedocs.io/en/stable/
 
 pip install -r requirements.txt
 
-2. Open meetings.xlsx enter the schedule of the day in the excel sheet in the correct columns in the correct format
+2. Open meetings.xlsx enter the schedule of the day in the Excel sheet in the correct columns in the correct format
 
 Time : dd-mm-yyyy hh:mm AM/PM Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided)
 
