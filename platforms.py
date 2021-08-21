@@ -1,12 +1,28 @@
+import sys
 import os
 
 def get_platform():
-    platform = Windows()
+    platform_name = sys.platform
 
-    if os.name != 'nt':
-        raise Exception('Only Windows supported at the moment and this appears to not be Windows')
+    if platform_name == 'win32':
+        return Windows()
+    elif platform_name == 'linux':
+        return Linux()
 
-    return platform
+    raise 'Unknown platform. Detected: {}, supported: Windows and Linux'.format(platform_name)
+
+
+class Linux:
+
+    def __init__(self):
+        self.platform_name = 'Linux'
+
+    def find_zoom_binary(self):
+        return '/usr/bin/zoom'
+
+    def close_zoom_process(self):
+        os.system('pkill -9 zoom')
+
 
 class Windows:
     def __init__(self):
