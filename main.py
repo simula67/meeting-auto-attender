@@ -1,13 +1,21 @@
+#!/usr/bin/env python3
+
 import datetime
-import os
+import logging
+import sys
 import time
 
 import platforms
-import zoom_automator
+import automator
 import openpyxl
 
 MAX_LATENESS_FOR_MEETING = 600
 MEETING_EARLINESS = 60
+
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
+logger = logging.getLogger('MAIN')
+#logger.addHandler(logging.StreamHandler(sys.stdout))
+
 
 
 def get_meetings():
@@ -34,12 +42,12 @@ def join_meetings(zoom_meetings, zoomautomator):
 
         # Join sometime early for later scheduled meeting
         if current_time < meeting_time - MEETING_EARLINESS:
-            print("Next meeting in ", end="")
-            print(datetime.timedelta(seconds=(meeting_time - current_time) - MEETING_EARLINESS))
+            next_meeting_time = datetime.timedelta(seconds=(meeting_time - current_time) - MEETING_EARLINESS)
+            logger.info('Next meeting in {}'.format(next_meeting_time))
             time.sleep(meeting_time - current_time - MEETING_EARLINESS)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
-            print('Skipped meeting {} since more than {} minutes have passed since this meeting began'
+            logger.info('Skipped meeting {} since more than {} minutes have passed since this meeting began'
                   .format(i + 1, MAX_LATENESS_FOR_MEETING / 60))
             continue
 
@@ -48,16 +56,17 @@ def join_meetings(zoom_meetings, zoomautomator):
 
 
 if __name__ == '__main__':
+
     # Mention pre-requisites
-    print('Please ensure that you have signed into Zoom')
+    logger.info('Please ensure that you have signed into Zoom')
 
     # Setup
     platform = platforms.get_platform()
-    zoomautomator = zoom_automator.ZoomAutomator(platform=platform)
+    zoom_automator = automator.ZoomAutomator(platform=platform)
 
     # Run
     meetings = get_meetings()
-    join_meetings(meetings, zoomautomator)
+    join_meetings(meetings, zoom_automator)
 
     # Cleanup
-    print("Done")
+    logger.info("Done")
