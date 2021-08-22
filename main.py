@@ -30,7 +30,7 @@ def join_meetings(zoom_meetings, zoomautomator):
 
         # Setting the meeting times
         current_time = round(time.time(), 0)
-        meeting_time = datetime.datetime.strptime(current_meeting[0], "%d-%m-%Y %H:%M %p").timestamp()
+        meeting_time = datetime.datetime.strptime(current_meeting[0], "%d-%m-%Y %H:%M").timestamp()
 
         # Join sometime early for later scheduled meeting
         if current_time < meeting_time - MEETING_EARLINESS:
