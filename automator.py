@@ -4,6 +4,7 @@ import webbrowser
 
 import pyautogui
 from PIL import Image
+logging.getLogger('PIL').setLevel(logging.WARNING)
 
 # enabling mouse fail safe
 pyautogui.FAILSAFE = True
@@ -31,16 +32,17 @@ class ZoomAutomator:
         webbrowser.open(meeting_link)
         start = time.time()
         time.sleep(3)
-        while True:
+        meeting_joined = False
+        while not meeting_joined:
             logger.info('Checking if Zoom was opened')
-            open_link = pyautogui.locateOnScreen('images/openlink.png', confidence=self.confidence)
-            open_zoom = pyautogui.locateOnScreen('images/openzoom.png', confidence=self.confidence)
-            if open_link is not None:
+            launch_meeting = pyautogui.locateOnScreen('images/launchmeeting.png', confidence=self.confidence)
+            leave_meeting = pyautogui.locateOnScreen('images/leave.png', confidence=self.confidence)
+            if launch_meeting is not None:
                 logger.info('Clicking on Launch Meeting')
-                pyautogui.click(open_link)
-            elif open_zoom is not None:
+                pyautogui.click(launch_meeting)
+            elif leave_meeting is not None:
                 logger.info('Joined meeting')
-                # pyautogui.click(open_zoom)
+                meeting_joined = True
             elif (time.time() - start) >= MAX_WAIT_LINK_OPEN:
                 logger.info("Link " + meeting_link + " not opened")
             time.sleep(3)
