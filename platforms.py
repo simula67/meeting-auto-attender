@@ -8,9 +8,20 @@ def get_platform():
         return Windows()
     elif platform_name == 'linux':
         return Linux()
+    elif platform_name == 'darwin':
+        return MacOS()
 
     raise 'Unknown platform. Detected: {}, supported: Windows and Linux'.format(platform_name)
 
+class MacOS:
+    def __init__(self):
+        self.platform_name = 'MacOS'
+
+    def find_zoom_binary(self):
+        return '/Applications/zoom.us.app/Contents/MacOS/zoom.us'
+
+    def close_zoom_process(self):
+        os.system('pkill -9 zoom.us')
 
 class Linux:
 
