@@ -44,7 +44,9 @@ def join_meetings(zoom_meetings, zoomautomator):
         if current_time < meeting_time - MEETING_EARLINESS:
             next_meeting_time = datetime.timedelta(seconds=(meeting_time - current_time) - MEETING_EARLINESS)
             logger.info('Next meeting in {}'.format(next_meeting_time))
-            time.sleep(meeting_time - current_time - MEETING_EARLINESS)
+            sleep_duration = meeting_time - current_time - MEETING_EARLINESS
+            logger.info('Sleeping for : {} seconds'.format(sleep_duration))
+            time.sleep(sleep_duration)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
             logger.info('Skipped meeting {} since more than {} minutes have passed since this meeting began'
