@@ -25,11 +25,18 @@ class ZoomAutomator:
         if self.platform.platform_name == 'Linux':
             # The fonts could be different for Linux, so reduce the confidence a bit
             self.confidence = 0.8
+        elif self.platform.platform_name == 'MacOS':
+            self.confidence = 0.5
 
     def join_meeting_with_link(self, meeting_link):
-        logger.info('Joining the meeting with link: {}'.format(meeting_link))
+        meeting_link_without_hash_sucess = meeting_link
+        if meeting_link.endswith('#success'):
+            logger.info('Removing \'#success\' from meeting link')
+            meeting_link_without_hash_sucess = meeting_link[:-len('#success')]
+
+        logger.info('Joining the meeting with link: {}'.format(meeting_link_without_hash_sucess))
         # open the given link in web browser
-        webbrowser.open(meeting_link)
+        webbrowser.open(meeting_link_without_hash_sucess)
         start = time.time()
         time.sleep(3)
         meeting_joined = False
@@ -37,12 +44,12 @@ class ZoomAutomator:
             logger.info('Checking if Zoom was opened')
             launch_meeting = pyautogui.locateOnScreen('images/launchmeeting.png', confidence=self.confidence)
             leave_meeting = pyautogui.locateOnScreen('images/leave.png', confidence=self.confidence)
-            if launch_meeting is not None:
-                logger.info('Clicking on Launch Meeting')
-                pyautogui.click(launch_meeting)
-            elif leave_meeting is not None:
+            if leave_meeting is not None:
                 logger.info('Joined meeting')
                 meeting_joined = True
+            elif launch_meeting is not None:
+                logger.info('Clicking on Launch Meeting')
+                pyautogui.click(launch_meeting)
             elif (time.time() - start) >= MAX_WAIT_LINK_OPEN:
                 logger.info("Link " + meeting_link + " not opened")
             time.sleep(3)
