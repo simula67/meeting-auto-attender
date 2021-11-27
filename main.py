@@ -42,10 +42,9 @@ def join_meetings(zoom_meetings, zoomautomator):
 
         # Join sometime early for later scheduled meeting
         if current_time < meeting_time - MEETING_EARLINESS:
-            next_meeting_time = datetime.timedelta(seconds=(meeting_time - current_time) - MEETING_EARLINESS)
-            logger.info('Next meeting in {}'.format(next_meeting_time))
             sleep_duration = meeting_time - current_time - MEETING_EARLINESS
-            logger.info('Sleeping for : {} seconds'.format(sleep_duration))
+            next_meeting_time = datetime.timedelta(seconds=sleep_duration)
+            logger.info('Sleeping till the next meeting, which is in {}.'.format(next_meeting_time))
             time.sleep(sleep_duration)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
