@@ -57,7 +57,7 @@ class ZoomAutomator:
     def join_meeting_with_id(self, meeting_id, meeting_password):
         cur = round(time.time(), 0)
         time.sleep(3)
-        # locating the zoom app
+        # locating the Zoom app
         while True:
             zoom_app = pyautogui.locateOnScreen('images/final.png', confidence=self.confidence)
             if zoom_app is not None:
