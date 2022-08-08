@@ -89,8 +89,9 @@ def join_meetings(meetings, automator):
             time.sleep(sleep_duration)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
-            logger.info('Skipped meeting {} since more than {} minutes have passed since this meeting began'
-                  .format(i + 1, MAX_LATENESS_FOR_MEETING / 60))
+            logger.info('Skipped meeting \"{}\" (meeting {}) since more than {} minutes have passed since this '
+                        'meeting began '
+                  .format(current_meeting[4], i + 1, MAX_LATENESS_FOR_MEETING / 60))
             continue
 
         automator.join_meeting(meeting_link=current_meeting[1], meeting_id=current_meeting[2],
