@@ -12,7 +12,7 @@ Use with caution.
 
 # Platforms
 
-Windows, Linux and MacOS.
+Windows, Linux and macOS.
 
 # Input format
 
@@ -28,7 +28,10 @@ Meeting Password : 1234 (string)
 
 Comment: Example meeting (string)
 
-Please refer the example in meetings.xlsx or meetings.json
+Please refer the example in meetings.xlsx or meetings.json.
+
+These example meetings should get skipped when the program is run since they started a long time ago.
+There is no need to remove them from these files, as long as MAX_LATENESS_FOR_MEETING is not changed in meeting.py.
 
 # Modules used
 
@@ -52,11 +55,15 @@ PyWin32 - https://github.com/mhammond/pywin32
 
 pip install -r requirements.txt
 
-2. Open meetings.xlsx enter the schedule of the day in the Excel sheet in the correct columns in the correct format
+2.Optionally, open meetings.xlsx and enter the schedule of the day in the Excel sheet in the correct columns in the correct format.
 
-Time : dd-mm-yyyy hh:mm Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided) Comment: Example meeting (Optoinal)
+Time : dd-mm-yyyy hh:mm Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided) Comment: Example meeting (Optional)
 
 Warning : Please enter as given.
+
+Or, again optionally, you can use meetings.json and enter the meeting details there.
+
+The program will combine the meetings it obtained from all sources (meetings.xlsx, meetings.json and Outlook)
 
 3. Run Zoom and log in with your username and password, if you want to join as a particular user.
 
@@ -81,10 +88,10 @@ Add support for Microsoft Teams and Google Meet.
 
 # Notes
 
-Zoom has functionality to automatically keep [audio](https://support.zoom.us/hc/en-us/articles/203024649-Muting-your-microphone-when-joining-a-meeting) and [video](https://support.zoom.us/hc/en-us/articles/4404456197133-Turning-video-off-when-joining-a-meeting) disabled while joining a meeting.
+Zoom has functionality to automatically keep [audio](https://support.zoom.us/hc/en-us/articles/203024649-Muting-your-microphone-when-joining-a-meeting) and [video](https://support.zoom.us/hc/en-us/articles/4404456197133-Turning-video-off-when-joining-a-meeting) disabled when joining a meeting.
 
 It is highly advisable to have those enabled and not rely on functionality provided in this app.
-This is because this app uses UI automation and it will be less reliable than Zoom's own settings.
+This is because this app uses UI automation, and it will be less reliable than Zoom's own settings.
 
 # Credit
 
