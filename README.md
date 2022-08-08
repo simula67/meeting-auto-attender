@@ -95,5 +95,5 @@ This is because this app uses UI automation, and it will be less reliable than Z
 
 # Credit
 
-This is not original work. It is a copied and refactored version from https://github.com/Kn0wn-Un/Auto-Zoom
+Initial version from https://github.com/Kn0wn-Un/Auto-Zoom has been re-written almost entirely.
 

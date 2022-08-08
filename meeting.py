@@ -85,7 +85,7 @@ def join_meetings(meetings, automator):
         if current_time < meeting_time - MEETING_EARLINESS:
             sleep_duration = meeting_time - current_time - MEETING_EARLINESS
             next_meeting_time = datetime.timedelta(seconds=sleep_duration)
-            logger.info('Sleeping till the next meeting, which is in {}.'.format(next_meeting_time))
+            logger.info('Sleeping till the next meeting \"{}\", which is in {}.'.format(current_meeting[5], next_meeting_time))
             time.sleep(sleep_duration)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
