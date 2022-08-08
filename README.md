@@ -1,6 +1,8 @@
 # Description
 
-Python program to automatically join the online meetings based on the given input in the Excel sheet `meetings.xlsx`.
+Python program to automatically join the online meetings.
+The program picks meetings from meetings.xlsx, meetings.json or directly from Outlook.
+
 Only Zoom is supported for video conferencing at the moment.
 
 This program uses UI automation and is hence subject to errors.
@@ -10,7 +12,7 @@ Use with caution.
 
 # Platforms
 
-Windows and Linux.
+Windows, Linux and MacOS.
 
 # Input format
 
@@ -24,7 +26,9 @@ Meeting ID : 123456123 (string)
 
 Meeting Password : 1234 (string)
 
-Please refer the example in meetings.xlsx
+Comment: Example meeting (string)
+
+Please refer the example in meetings.xlsx or meetings.json
 
 # Modules used
 
@@ -33,6 +37,8 @@ pyautogui - https://pyautogui.readthedocs.io/en/latest/
 openpyxl - https://openpyxl.readthedocs.io/en/stable/
 
 PIL - https://pillow.readthedocs.io/en/stable/
+
+PyWin32 - https://github.com/mhammond/pywin32
 
 # Pre-Requirements
 
@@ -48,7 +54,7 @@ pip install -r requirements.txt
 
 2. Open meetings.xlsx enter the schedule of the day in the Excel sheet in the correct columns in the correct format
 
-Time : dd-mm-yyyy hh:mm Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided)
+Time : dd-mm-yyyy hh:mm Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided) Comment: Example meeting (Optoinal)
 
 Warning : Please enter as given.
 
@@ -71,9 +77,16 @@ Keep an eye out in case of errors and failures.
 
 # Future work
 
-Add support for Google Meet.
+Add support for Microsoft Teams and Google Meet.
 
-# Note
+# Notes
+
+Zoom has functionality to automatically keep [audio](https://support.zoom.us/hc/en-us/articles/203024649-Muting-your-microphone-when-joining-a-meeting) and [video](https://support.zoom.us/hc/en-us/articles/4404456197133-Turning-video-off-when-joining-a-meeting) disabled while joining a meeting.
+
+It is highly advisable to have those enabled and not rely on functionality provided in this app.
+This is because this app uses UI automation and it will be less reliable than Zoom's own settings.
+
+# Credit
 
 This is not original work. It is a copied and refactored version from https://github.com/Kn0wn-Un/Auto-Zoom
 

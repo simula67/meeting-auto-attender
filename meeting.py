@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import json
 import logging
 import openpyxl
 import datetime
@@ -13,7 +13,6 @@ logger = logging.getLogger('MEETING')
 
 
 def get_meetings_from_excel():
-    # copying data from Excel sheet to the program
     meetings = []
     wb = openpyxl.load_workbook('meetings.xlsx')
     sheet = wb['Sheet1']
@@ -30,6 +29,17 @@ def get_meetings_from_excel():
     return meetings
 
 
+def get_meetings_from_json():
+    with open('meetings.json', ) as f:
+        meetings = json.load(f)
+        logger.info('Collected following meetings from JSON:')
+        for meeting in meetings:
+            logger.info(meeting)
+            # Convert time to timestamp
+            meeting[0] = datetime.datetime.strptime(meeting[0], "%d-%m-%Y %H:%M").timestamp()
+        return meetings
+
+
 def get_meetings_from_outlook():
     outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
     calendar = outlook.GetDefaultFolder(9)
@@ -42,9 +52,9 @@ def get_meetings_from_outlook():
             meeting_time = appointment.StartInStartTimeZone.strftime("%d-%m-%Y %H:%M")
             meeting_link = appointment.Location
             meeting_topic = appointment.ConversationTopic
-            meetings.append([meeting_time, meeting_link, None, None, meeting_topic])
+            meetings.append([meeting_time, meeting_link, None, None, None, meeting_topic])
 
-    logger.info('Collected following meetings from outlook:')
+    logger.info('Collected following meetings from Outlook:')
     for meeting in meetings:
         logger.info(meeting)
         # Convert time to timestamp
@@ -53,13 +63,19 @@ def get_meetings_from_outlook():
 
 
 def get_meetings():
-    meetings = get_meetings_from_outlook() + get_meetings_from_excel()
+    meetings = get_meetings_from_outlook() + get_meetings_from_excel() + get_meetings_from_json()
     meetings.sort(key=lambda x: x[0])
     return meetings
 
-def join_meetings(zoom_meetings, zoomautomator):
-    for i in range(len(zoom_meetings)):
-        current_meeting = zoom_meetings[i]
+
+def join_meetings(meetings, automator):
+    '''
+    :param meetings: List([timestamp, meeting_link, meeting_id, meeting_password, meeting_topic])
+    :param automator: automator object implementing 'join_meeting' method
+    :return:
+    '''
+    for i in range(len(meetings)):
+        current_meeting = meetings[i]
 
         # Setting the meeting times
         current_time = round(time.time(), 0)
@@ -77,5 +93,6 @@ def join_meetings(zoom_meetings, zoomautomator):
                   .format(i + 1, MAX_LATENESS_FOR_MEETING / 60))
             continue
 
-        zoomautomator.join_meeting(meeting_link=current_meeting[1], meeting_id=current_meeting[2],
-                                   meeting_password=current_meeting[3])
+        automator.join_meeting(meeting_link=current_meeting[1], meeting_id=current_meeting[2],
+                               meeting_password=current_meeting[3])
+
