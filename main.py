@@ -14,7 +14,7 @@ logger = logging.getLogger('MAIN')
 
 if __name__ == '__main__':
 
-    # Change to script directory
+    logger.info("Changing to script directory")
     abspath = os.path.abspath(__file__)
     dir_name = os.path.dirname(abspath)
     os.chdir(dir_name)
@@ -23,11 +23,15 @@ if __name__ == '__main__':
     logger.info('Please ensure that you have signed into Zoom')
 
     # Setup
+    logger.info("Setting up platform")
     platform = platforms.get_platform()
+    logger.info("Detected platform: {}".format(platform.platform_name))
     zoom_automator = automator.ZoomAutomator(platform=platform)
 
     # Run
+    logger.info("Getting meetings")
     meetings = meeting.get_meetings()
+    logger.info("Joining meetings")
     meeting.join_meetings(meetings, zoom_automator)
 
     # Cleanup
