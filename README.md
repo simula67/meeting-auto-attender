@@ -55,7 +55,7 @@ PyWin32 - https://github.com/mhammond/pywin32
 
 pip install -r requirements.txt
 
-2.Optionally, open meetings.xlsx and enter the schedule of the day in the Excel sheet in the correct columns in the correct format.
+2. Optionally, open meetings.xlsx and enter the schedule of the day in the Excel sheet in the correct columns in the correct format.
 
 Time : dd-mm-yyyy hh:mm Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided) Comment: Example meeting (Optional)
 
@@ -84,7 +84,7 @@ Keep an eye out in case of errors and failures.
 
 # Future work
 
-Add support for Microsoft Teams and Google Meet.
+Add support for WebEx, Microsoft Teams and Google Meet.
 
 # Notes
 
