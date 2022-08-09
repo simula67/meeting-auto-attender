@@ -5,6 +5,10 @@ import openpyxl
 import datetime
 import time
 import win32com.client
+from urlextract import URLExtract
+import validators
+from urllib.parse import urlparse
+
 
 MAX_LATENESS_FOR_MEETING = 600
 MEETING_EARLINESS = 60
@@ -44,6 +48,7 @@ def get_meetings_from_outlook():
     outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
     calendar = outlook.GetDefaultFolder(9)
     appointments = sorted(calendar.Items, key=lambda x: x.StartInStartTimeZone.timestamp())
+    extractor = URLExtract()
     meetings = []
 
     for appointment in appointments:
@@ -51,6 +56,17 @@ def get_meetings_from_outlook():
         if appointment.StartInStartTimeZone.timestamp() - (MAX_LATENESS_FOR_MEETING + 5) > current_time:
             meeting_time = appointment.StartInStartTimeZone.strftime("%d-%m-%Y %H:%M")
             meeting_link = appointment.Location
+            if not validators.url(meeting_link):
+                # Meeting link is not a link, attempt correction
+                if meeting_link == 'Webex':
+                    # Correction for Webex
+                    urls = extractor.find_urls(appointment.Body)
+                    for url in urls:
+                        domain = urlparse(url).netloc.split('.')[-2]
+                        if domain == 'webex':
+                            meeting_link = url
+                            break
+
             meeting_topic = appointment.ConversationTopic
             meetings.append([meeting_time, meeting_link, None, None, None, meeting_topic])
 
