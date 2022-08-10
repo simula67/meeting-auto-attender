@@ -16,6 +16,11 @@ MEETING_EARLINESS = 60
 logger = logging.getLogger('MEETING')
 
 
+def log_collected_meetings(src, meetings):
+    logger.info('Collected following meetings from {}:'.format(src))
+    list(map(logger.info, meetings))
+
+
 def get_meetings_from_excel():
     meetings = []
     wb = openpyxl.load_workbook('meetings.xlsx')
@@ -25,22 +30,14 @@ def get_meetings_from_excel():
         if i[0] is not None:
             meetings.append(list(i))
     meetings.pop(0)
-    logger.info('Collected following meetings from Excel:')
-    for meeting in meetings:
-        logger.info(meeting)
-        # Convert time to timestamp
-        meeting[0] = datetime.datetime.strptime(meeting[0], "%d-%m-%Y %H:%M").timestamp()
+    log_collected_meetings("Excel sheet", meetings)
     return meetings
 
 
 def get_meetings_from_json():
     with open('meetings.json', ) as f:
         meetings = json.load(f)
-        logger.info('Collected following meetings from JSON:')
-        for meeting in meetings:
-            logger.info(meeting)
-            # Convert time to timestamp
-            meeting[0] = datetime.datetime.strptime(meeting[0], "%d-%m-%Y %H:%M").timestamp()
+        log_collected_meetings('JSON', meetings)
         return meetings
 
 
@@ -70,17 +67,12 @@ def get_meetings_from_outlook():
             meeting_topic = appointment.ConversationTopic
             meetings.append([meeting_time, meeting_link, None, None, meeting_topic])
 
-    logger.info('Collected following meetings from Outlook:')
-    for meeting in meetings:
-        logger.info(meeting)
-        # Convert time to timestamp
-        meeting[0] = datetime.datetime.strptime(meeting[0], "%d-%m-%Y %H:%M").timestamp()
+    log_collected_meetings('Outlook', meetings)
     return meetings
 
 
 def get_meetings():
     meetings = get_meetings_from_outlook() + get_meetings_from_excel() + get_meetings_from_json()
-    meetings.sort(key=lambda x: x[0])
     return meetings
 
 
@@ -90,26 +82,29 @@ def join_meetings(meetings, automator):
     :param automator: automator object implementing 'join_meeting' method
     :return:
     '''
-    for i in range(len(meetings)):
-        current_meeting = meetings[i]
-
+    def convert_time_to_timestamp(meeting):
+        meeting[0] = datetime.datetime.strptime(meeting[0], "%d-%m-%Y %H:%M").timestamp()
+        return meeting
+    meetings = list(map(convert_time_to_timestamp, meetings))
+    meetings.sort(key=lambda x: x[0])
+    for i, meeting in enumerate(meetings):
         # Setting the meeting times
         current_time = round(time.time(), 0)
-        meeting_time = current_meeting[0]
+        meeting_time = meeting[0]
 
         # Join sometime early for later scheduled meeting
         if current_time < meeting_time - MEETING_EARLINESS:
             sleep_duration = meeting_time - current_time - MEETING_EARLINESS
             next_meeting_time = datetime.timedelta(seconds=sleep_duration)
-            logger.info('Sleeping till the next meeting \"{}\", which is in {}.'.format(current_meeting[4], next_meeting_time))
+            logger.info('Sleeping till the next meeting \"{}\", which is in {}.'.format(meeting[4], next_meeting_time))
             time.sleep(sleep_duration)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
             logger.info('Skipped meeting \"{}\" (meeting {}) since more than {} minutes have passed since this '
                         'meeting began '
-                  .format(current_meeting[4], i + 1, MAX_LATENESS_FOR_MEETING / 60))
+                  .format(meeting[4], i + 1, MAX_LATENESS_FOR_MEETING / 60))
             continue
 
-        automator.join_meeting(meeting_link=current_meeting[1], meeting_id=current_meeting[2],
-                               meeting_password=current_meeting[3])
+        automator.join_meeting(meeting_link=meeting[1], meeting_id=meeting[2],
+                               meeting_password=meeting[3])
 
