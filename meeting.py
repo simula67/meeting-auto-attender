@@ -12,6 +12,7 @@ from urllib.parse import urlparse
 
 MAX_LATENESS_FOR_MEETING = 600
 MEETING_EARLINESS = 60
+MAX_COLLECT_DURATION = 15780000   # Seconds in 6 months
 
 logger = logging.getLogger('MEETING')
 
@@ -42,14 +43,17 @@ def get_meetings_from_json():
 
 
 def get_meetings_from_outlook():
-    outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-    calendar = outlook.GetDefaultFolder(9)
-    appointments = sorted(calendar.Items, key=lambda x: x.StartInStartTimeZone.timestamp())
-    extractor = URLExtract()
-    meetings = []
 
-    for appointment in appointments:
-        current_time = round(time.time(), 0)
+    current_time = round(time.time(), 0)
+    extractor = URLExtract()
+
+    outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+    calendar = outlook.GetDefaultFolder(9).Items
+    calendar.IncludeRecurrences = True
+    calendar.Sort("[Start]")
+    meetings = []
+    appointment = calendar.GetNext()
+    while appointment is not None and appointment.StartInStartTimeZone.timestamp() < (current_time + MAX_COLLECT_DURATION):
         if appointment.StartInStartTimeZone.timestamp() - (MAX_LATENESS_FOR_MEETING + 5) > current_time:
             meeting_time = appointment.StartInStartTimeZone.strftime("%d-%m-%Y %H:%M")
             meeting_link = appointment.Location
@@ -66,6 +70,7 @@ def get_meetings_from_outlook():
 
             meeting_topic = appointment.ConversationTopic
             meetings.append([meeting_time, meeting_link, None, None, meeting_topic])
+        appointment = calendar.GetNext()
 
     log_collected_meetings('Outlook', meetings)
     return meetings
