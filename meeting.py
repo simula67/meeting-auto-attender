@@ -53,13 +53,14 @@ def get_meetings_from_outlook():
     calendar.Sort("[Start]")
     meetings = []
     appointment = calendar.GetNext()
-    while appointment is not None and appointment.StartInStartTimeZone.timestamp() < (current_time + MAX_COLLECT_DURATION):
+    # Do not collect meetings beyond MAX_COLLECT_DURATION because recurring meetings can go to infinity.
+    while appointment and appointment.StartInStartTimeZone.timestamp() < (current_time + MAX_COLLECT_DURATION):
         if appointment.StartInStartTimeZone.timestamp() - (MAX_LATENESS_FOR_MEETING + 5) > current_time:
             meeting_time = appointment.StartInStartTimeZone.strftime("%d-%m-%Y %H:%M")
             meeting_link = appointment.Location
             if not validators.url(meeting_link):
                 # Meeting link is not a link, attempt correction
-                if meeting_link == 'Webex':
+                if meeting_link.lower() == 'webex':
                     # Correction for Webex
                     urls = extractor.find_urls(appointment.Body)
                     for url in urls:
@@ -101,7 +102,9 @@ def join_meetings(meetings, automator):
         if current_time < meeting_time - MEETING_EARLINESS:
             sleep_duration = meeting_time - current_time - MEETING_EARLINESS
             next_meeting_time = datetime.timedelta(seconds=sleep_duration)
-            logger.info('Sleeping till the next meeting \"{}\", which is in {}.'.format(meeting[4], next_meeting_time))
+            if meeting[1] is not None:
+                logger.info('Next meeting link: {}'.format(meeting[1]))
+            logger.info('Sleeping till the next meeting \"{}\", which is in {}'.format(meeting[4], next_meeting_time))
             time.sleep(sleep_duration)
         # Too much time has passed already
         elif (current_time - meeting_time) > MAX_LATENESS_FOR_MEETING:
