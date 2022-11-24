@@ -26,13 +26,13 @@ if __name__ == '__main__':
     logger.info("Setting up platform")
     platform = platforms.get_platform()
     logger.info("Detected platform: {}".format(platform.platform_name))
-    zoom_automator = automator.ZoomAutomator(platform=platform)
+    automator = automator.Automator(platform=platform)
 
     # Run
     logger.info("Getting meetings")
     meetings = meeting.get_meetings()
     logger.info("Joining meetings")
-    meeting.join_meetings(meetings, zoom_automator)
+    meeting.join_meetings(meetings, automator)
 
     # Cleanup
     logger.info("Done")
