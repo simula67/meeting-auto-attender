@@ -9,11 +9,16 @@ from meeting import log_collected_meetings, MAX_LATENESS_FOR_MEETING, MAX_COLLEC
 
 logger = logging.getLogger('MEETING')
 
+try:
+    import win32com.client
+except ImportError as e:
+    logger.error('Failed to import win32com.client: {}'.format(e))
+
+
 def get_platform():
     platform_name = sys.platform
 
     if platform_name == 'win32':
-        import win32com.client
         return Windows()
     elif platform_name == 'linux':
         return Linux()
