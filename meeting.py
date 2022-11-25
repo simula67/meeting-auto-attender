@@ -4,11 +4,8 @@ import logging
 import openpyxl
 import datetime
 import time
-import win32com.client
-from urlextract import URLExtract
-import validators
-from urllib.parse import urlparse
 
+import platforms
 
 MAX_LATENESS_FOR_MEETING = 600
 MEETING_EARLINESS = 60
@@ -42,43 +39,8 @@ def get_meetings_from_json():
         return meetings
 
 
-def get_meetings_from_outlook():
-
-    current_time = round(time.time(), 0)
-    extractor = URLExtract()
-
-    outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-    calendar = outlook.GetDefaultFolder(9).Items
-    calendar.IncludeRecurrences = True
-    calendar.Sort("[Start]")
-    meetings = []
-    appointment = calendar.GetNext()
-    # Do not collect meetings beyond MAX_COLLECT_DURATION because recurring meetings can go to infinity.
-    while appointment and appointment.StartInStartTimeZone.timestamp() < (current_time + MAX_COLLECT_DURATION):
-        if appointment.StartInStartTimeZone.timestamp() - (MAX_LATENESS_FOR_MEETING + 5) > current_time:
-            meeting_time = appointment.StartInStartTimeZone.strftime("%d-%m-%Y %H:%M")
-            meeting_link = appointment.Location
-            if not validators.url(meeting_link):
-                # Meeting link is not a link, attempt correction
-                if meeting_link.lower() == 'webex':
-                    # Correction for Webex
-                    urls = extractor.find_urls(appointment.Body)
-                    for url in urls:
-                        domain = urlparse(url).netloc.split('.')[-2]
-                        if domain == 'webex':
-                            meeting_link = url
-                            break
-
-            meeting_topic = appointment.ConversationTopic
-            meetings.append([meeting_time, meeting_link, None, None, meeting_topic])
-        appointment = calendar.GetNext()
-
-    log_collected_meetings('Outlook', meetings)
-    return meetings
-
-
 def get_meetings():
-    meetings = get_meetings_from_outlook() + get_meetings_from_excel() + get_meetings_from_json()
+    meetings = platforms.get_platform().get_meetings_from_outlook() + get_meetings_from_excel() + get_meetings_from_json()
     return meetings
 
 
