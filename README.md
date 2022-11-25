@@ -1,9 +1,10 @@
 # Description
 
 Python program to automatically join the online meetings.
-The program picks meetings from meetings.xlsx, meetings.json or directly from Outlook.
+The program picks meetings from meetings.xlsx, meetings.json or directly from Outlook
+(Picking up meetings from Outlook is supported only on Windows).
 
-Only Zoom is supported for video conferencing at the moment.
+Only Zoom and WebEx are supported for video conferencing at the moment.
 
 This program uses UI automation and is hence subject to errors.
 For example, Chrome may prompt user to click additional buttons to open Zoom ('Open these types of links in Zoom app').
@@ -45,7 +46,7 @@ PyWin32 - https://github.com/mhammond/pywin32
 
 # Pre-Requirements
 
-1. Zoom app
+1. Zoom, WebEx apps
 2. Web browser (chrome, firefox. Make sure it has pop-up enabled to open Zoom app)
 3. Python - Download and install from https://www.python.org/downloads/
 
@@ -54,6 +55,10 @@ PyWin32 - https://github.com/mhammond/pywin32
 1. Open command prompt and type following command (installing modules - Pyautogui, Openpyxl, Pillow) (this is required only for the first time)
 
 pip install -r requirements.txt
+
+Installation of pywin32 may fail on non-Windows systems.
+This is only required for picking up meetings from Outlook and therefore, this feature is not supported on non-Windows platforms.
+The rest of the program should continue to run even without this module.
 
 2. Optionally, open meetings.xlsx and enter the schedule of the day in the Excel sheet in the correct columns in the correct format.
 
@@ -65,7 +70,7 @@ Or, again optionally, you can use meetings.json and enter the meeting details th
 
 The program will combine the meetings it obtained from all sources (meetings.xlsx, meetings.json and Outlook)
 
-3. Run Zoom and log in with your username and password, if you want to join as a particular user.
+3. Run Zoom and WebEx and log in with your username and password, if you want to join as a particular user.
 
 4. Make sure to close all other windows and free up the desktop.
 
@@ -84,14 +89,15 @@ Keep an eye out in case of errors and failures.
 
 # Future work
 
-Add support for WebEx, Microsoft Teams and Google Meet.
+Add support for Microsoft Teams and Google Meet.
 
 # Notes
 
 Zoom has functionality to automatically keep [audio](https://support.zoom.us/hc/en-us/articles/203024649-Muting-your-microphone-when-joining-a-meeting) and [video](https://support.zoom.us/hc/en-us/articles/4404456197133-Turning-video-off-when-joining-a-meeting) disabled when joining a meeting.
+WebEx has similar [functionality](https://help.webex.com/en-us/article/npg35it/Webex-App-%7C-Choose-the-default-audio-and-video-for-meetings)
 
 It is highly advisable to have those enabled and not rely on functionality provided in this app.
-This is because this app uses UI automation, and it will be less reliable than Zoom's own settings.
+This is because this app uses UI automation, and it will be less reliable than Zoom's or WebEx's own settings.
 
 # Credit
 
