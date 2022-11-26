@@ -12,7 +12,8 @@ logger = logging.getLogger('MEETING')
 try:
     import win32com.client
 except ImportError as e:
-    logger.error('Failed to import win32com.client: {}'.format(e))
+    logger.error('Failed to import win32com.client: {}.'.format(e))
+    logger.info('Program will continue. It will not be able to pickup meetings from Outlook.')
 
 
 def get_platform():
