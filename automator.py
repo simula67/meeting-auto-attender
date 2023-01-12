@@ -116,7 +116,8 @@ class ZoomAutomator:
             logger.info('Checking if Zoom was opened')
             launch_meeting = pyautogui.locateOnScreen('images/launchmeeting.png', confidence=self.confidence)
             leave_meeting = pyautogui.locateOnScreen('images/leave.png', confidence=self.confidence)
-            if leave_meeting is not None:
+            end_meeting = pyautogui.locateOnScreen('images/end.png', confidence=self.confidence)
+            if leave_meeting is not None or end_meeting is not None:
                 logger.info('Joined meeting')
                 meeting_joined = True
             elif launch_meeting is not None:

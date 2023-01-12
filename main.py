@@ -20,7 +20,7 @@ if __name__ == '__main__':
     os.chdir(dir_name)
 
     # Mention pre-requisites
-    logger.info('Please ensure that you have signed into Zoom')
+    logger.info('Please ensure that you have signed into Zoom/WebEx')
 
     # Setup
     logger.info("Setting up platform")

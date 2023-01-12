@@ -91,11 +91,14 @@ class Windows:
                 meeting_link = appointment.Location
                 if not validators.url(meeting_link):
                     # Meeting link is not a link, attempt correction
-                    if meeting_link.lower() == 'webex':
+                    if meeting_link.lower() == 'webex' or meeting_link == '':
                         # Correction for Webex
                         urls = extractor.find_urls(appointment.Body)
                         for url in urls:
-                            domain = urlparse(url).netloc.split('.')[-2]
+                            network_loc = urlparse(url).netloc.split('.')
+                            if len(network_loc) < 2:
+                                continue
+                            domain = network_loc[-2]
                             if domain == 'webex':
                                 meeting_link = url
                                 break
