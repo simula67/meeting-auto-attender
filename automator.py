@@ -50,7 +50,12 @@ class Automator:
 
     def join_meeting(self, meeting_link, meeting_id, meeting_password):
         if meeting_link is not None:
-            domain = urlparse(meeting_link).netloc.split('.')[-2]
+            url_components = urlparse(meeting_link).netloc.split('.')
+            if len(url_components) < 2:
+                domain = url_components[-2]
+            else:
+                raise Exception('Meeting link invalid: {}'.format(meeting_link))
+
             if domain.lower() == 'webex':
                 self.webex_automator.join_meeting_with_link(meeting_link)
             elif domain.lower() == 'zoom':
