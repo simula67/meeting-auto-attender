@@ -52,9 +52,9 @@ class Automator:
         if meeting_link is not None:
             url_components = urlparse(meeting_link).netloc.split('.')
             if len(url_components) < 2:
-                domain = url_components[-2]
-            else:
                 raise Exception('Meeting link invalid: {}'.format(meeting_link))
+            else:
+                domain = url_components[-2]
 
             if domain.lower() == 'webex':
                 self.webex_automator.join_meeting_with_link(meeting_link)
