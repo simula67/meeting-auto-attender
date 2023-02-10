@@ -8,6 +8,8 @@ import platforms
 import automator
 import meeting
 
+from wakepy import set_keepawake, unset_keepawake
+
 logger = logging.getLogger('MAIN')
 #logger.addHandler(logging.StreamHandler(sys.stdout))
 
@@ -23,6 +25,8 @@ if __name__ == '__main__':
     logger.info('Please ensure that you have signed into Zoom/WebEx')
 
     # Setup
+    logger.info('Keeping system to keep awake mode')
+    set_keepawake(keep_screen_awake=False)
     logger.info("Setting up platform")
     platform = platforms.get_platform()
     logger.info("Detected platform: {}".format(platform.platform_name))
@@ -36,3 +40,4 @@ if __name__ == '__main__':
 
     # Cleanup
     logger.info("Done")
+    unset_keepawake()
