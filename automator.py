@@ -134,9 +134,13 @@ class ZoomAutomator:
         self.mute_mic()
 
     def join_meeting_with_id(self, meeting_id, meeting_password):
+        # start a timer
         cur = round(time.time(), 0)
         time.sleep(3)
-        # locating the Zoom app
+        # start Zoom app
+        from os import system
+        system(self.bin_path)
+        # locating the Zoom app, TIMEOUT = 120 s
         while True:
             zoom_app = pyautogui.locateOnScreen('images/final.png', confidence=self.confidence)
             if zoom_app is not None:
