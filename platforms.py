@@ -29,6 +29,24 @@ def get_platform():
     raise 'Unknown platform. Detected: {}, supported: Windows and Linux'.format(platform_name)
 
 
+def get_domain(url):
+    network_loc = urlparse(url).netloc.split('.')
+    if len(network_loc) < 2:
+        return None
+    return network_loc[-2]
+
+
+def search_links(source, search_domain):
+    extractor = URLExtract()
+    urls = extractor.find_urls(source)
+    for url in urls:
+        domain = get_domain(url)
+        if not domain:
+            continue
+        if domain == search_domain:
+            return url
+
+
 class MacOS:
     def __init__(self):
         self.platform_name = 'MacOS'
@@ -76,7 +94,6 @@ class Windows:
     def get_meetings_from_outlook(self):
 
         current_time = round(time.time(), 0)
-        extractor = URLExtract()
 
         outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         calendar = outlook.GetDefaultFolder(9).Items
@@ -93,15 +110,12 @@ class Windows:
                     # Meeting link is not a link, attempt correction
                     if meeting_link.lower() == 'webex' or meeting_link == '':
                         # Correction for Webex
-                        urls = extractor.find_urls(appointment.Body)
-                        for url in urls:
-                            network_loc = urlparse(url).netloc.split('.')
-                            if len(network_loc) < 2:
-                                continue
-                            domain = network_loc[-2]
-                            if domain == 'webex':
-                                meeting_link = url
-                                break
+                        meeting_link = search_links(appointment.Body, 'webex')
+                    elif 'zoom' in meeting_link.lower():
+                        # Correction for Zoom
+                        meeting_link = search_links(meeting_link, 'zoom')
+                        if not meeting_link:
+                            meeting_link = search_links(appointment.Body, 'zoom')
 
                 meeting_topic = appointment.ConversationTopic
                 meetings.append([meeting_time, meeting_link, None, None, meeting_topic])
