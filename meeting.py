@@ -7,9 +7,8 @@ import time
 
 import platforms
 
-MAX_LATENESS_FOR_MEETING = 600
-MEETING_EARLINESS = 60
-MAX_COLLECT_DURATION = 15780000   # Seconds in 6 months
+from constants import MAX_LATENESS_FOR_MEETING, MEETING_EARLINESS
+
 
 logger = logging.getLogger('MEETING')
 
@@ -40,7 +39,9 @@ def get_meetings_from_json():
 
 
 def get_meetings():
-    meetings = platforms.get_platform().get_meetings_from_outlook() + get_meetings_from_excel() + get_meetings_from_json()
+    meetings_from_outlook = platforms.get_platform().get_meetings_from_outlook()
+    log_collected_meetings('Outlook', meetings_from_outlook)
+    meetings =  meetings_from_outlook + get_meetings_from_excel() + get_meetings_from_json()
     return meetings
 
 
