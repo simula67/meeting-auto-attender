@@ -2,7 +2,7 @@ import logging
 import time
 import webbrowser
 from urllib.parse import urlparse
-
+from constants import MAX_WAIT_LINK_OPEN
 
 import pyautogui
 from PIL import Image
@@ -11,7 +11,6 @@ logging.getLogger('PIL').setLevel(logging.WARNING)
 # enabling mouse fail safe
 pyautogui.FAILSAFE = True
 
-MAX_WAIT_LINK_OPEN = 300
 
 logger = logging.getLogger('AUTOMATOR')
 

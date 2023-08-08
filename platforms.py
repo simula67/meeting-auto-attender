@@ -5,7 +5,8 @@ from urlextract import URLExtract
 import time
 import validators
 from urllib.parse import urlparse
-from meeting import log_collected_meetings, MAX_LATENESS_FOR_MEETING, MAX_COLLECT_DURATION
+from constants import MAX_LATENESS_FOR_MEETING, MAX_COLLECT_DURATION
+
 
 logger = logging.getLogger('MEETING')
 
@@ -36,7 +37,7 @@ def get_domain(url):
     return network_loc[-2]
 
 
-def search_links(source, search_domain):
+def search_links_domain(source, search_domain):
     extractor = URLExtract()
     urls = extractor.find_urls(source)
     for url in urls:
@@ -45,6 +46,15 @@ def search_links(source, search_domain):
             continue
         if domain == search_domain:
             return url
+
+
+def search_links_text(source, search_text):
+    extractor = URLExtract()
+    urls = extractor.find_urls(source)
+    for url in urls:
+        if search_text in url:
+            return url
+
 
 
 class MacOS:
@@ -110,17 +120,20 @@ class Windows:
                     # Meeting link is not a link, attempt correction
                     if meeting_link.lower() == 'webex' or meeting_link == '':
                         # Correction for Webex
-                        meeting_link = search_links(appointment.Body, 'webex')
+                        meeting_link = search_links_domain(appointment.Body, 'webex')
                     elif 'zoom' in meeting_link.lower():
                         # Correction for Zoom
-                        meeting_link = search_links(meeting_link, 'zoom')
+                        meeting_link = search_links_domain(meeting_link, 'zoom')
                         if not meeting_link:
-                            meeting_link = search_links(appointment.Body, 'zoom')
+                            meeting_link = search_links_domain(appointment.Body, 'zoom')
+                    elif 'microsoft teams meeting' in meeting_link.lower():
+                        meeting_link = search_links_text(appointment.Body, 'https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F')
+
+
 
                 meeting_topic = appointment.ConversationTopic
                 meetings.append([meeting_time, meeting_link, None, None, meeting_topic])
             appointment = calendar.GetNext()
 
-        log_collected_meetings('Outlook', meetings)
         return meetings
 
