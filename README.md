@@ -46,8 +46,8 @@ PyWin32 - https://github.com/mhammond/pywin32
 
 # Pre-Requirements
 
-1. Zoom, WebEx apps
-2. Web browser (chrome, firefox. Make sure it has pop-up enabled to open Zoom app)
+1. Zoom, WebEx, MS Teams apps
+2. Web browser (Chrome, Firefox etc. Make sure it has pop-up enabled to open Zoom app)
 3. Python - Download and install from https://www.python.org/downloads/
 
 # Steps to use
@@ -70,7 +70,7 @@ Or, again optionally, you can use meetings.json and enter the meeting details th
 
 The program will combine the meetings it obtained from all sources (meetings.xlsx, meetings.json and Outlook)
 
-3. Run Zoom and WebEx and log in with your username and password, if you want to join as a particular user.
+3. Run Zoom, WebEx and MS Teams and log in with your username and password, if you want to join as a particular user.
 
 4. Make sure to close all other windows and free up the desktop.
 
@@ -89,7 +89,7 @@ Keep an eye out in case of errors and failures.
 
 # Future work
 
-Add support for Microsoft Teams and Google Meet.
+Add support for Google Meet.
 
 # Notes
 
@@ -102,4 +102,3 @@ This is because this app uses UI automation, and it will be less reliable than Z
 # Credit
 
 Initial version from https://github.com/Kn0wn-Un/Auto-Zoom has been re-written almost entirely.
-
