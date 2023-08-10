@@ -46,6 +46,7 @@ class Automator:
         self.platform = platform
         self.zoom_automator = ZoomAutomator(platform)
         self.webex_automator = WebExAutomator(platform)
+        self.msteams_automator = MSTeamsAutomator(platform)
 
     def join_meeting(self, meeting_link, meeting_id, meeting_password):
         if meeting_link is not None:
@@ -55,7 +56,9 @@ class Automator:
             else:
                 domain = url_components[-2]
 
-            if domain.lower() == 'webex':
+            if 'teams.microsoft.com' in meeting_link:
+                self.msteams_automator.join_meeting_with_link(meeting_link)
+            elif domain.lower() == 'webex':
                 self.webex_automator.join_meeting_with_link(meeting_link)
             elif domain.lower() == 'zoom':
                 self.zoom_automator.join_meeting_with_link(meeting_link)
@@ -80,8 +83,18 @@ class WebExAutomator:
     def join_meeting_with_link(self, meeting_link):
         webbrowser.open(meeting_link)
         locate_and_click('images/webex_join_meeting.png', confidence=self.confidence, pre_click_delay=5)
-        locate_and_click('images/webex_mute.png', timeout=15,confidence=self.confidence)
+        locate_and_click('images/webex_mute.png', timeout=15, confidence=self.confidence)
 
+
+class MSTeamsAutomator:
+    def __init__(self, platform):
+        self.platform = platform
+        self.confidence = 0.9
+
+    def join_meeting_with_link(self, meeting_link):
+        webbrowser.open(meeting_link)
+        locate_and_click('images/msteams_mute.png', timeout=15, confidence=self.confidence)
+        locate_and_click('images/msteams_join_meeting.png', confidence=self.confidence, pre_click_delay=5)
 
 
 class ZoomAutomator:
