@@ -22,11 +22,12 @@ if __name__ == '__main__':
     os.chdir(dir_name)
 
     # Mention pre-requisites
-    logger.info('Please ensure that you have signed into Zoom/WebEx')
+    logger.info('Please ensure that you have signed into Zoom/WebEx/MS Teams')
 
     # Setup
     logger.info('Keeping system to keep awake mode')
-    set_keepawake(keep_screen_awake=False)
+    # Pass keep_screen_awake=True to below function call to keep the screen awake.
+    set_keepawake()
     logger.info("Setting up platform")
     platform = platforms.get_platform()
     logger.info("Detected platform: {}".format(platform.platform_name))

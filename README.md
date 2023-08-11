@@ -4,12 +4,13 @@ Python program to automatically join the online meetings.
 The program picks meetings from meetings.xlsx, meetings.json or directly from Outlook
 (Picking up meetings from Outlook is supported only on Windows).
 
-Only Zoom and WebEx are supported for video conferencing at the moment.
+Only Zoom, WebEx and MS Teams are supported for video conferencing at the moment.
 
 This program uses UI automation and is hence subject to errors.
 For example, Chrome may prompt user to click additional buttons to open Zoom ('Open these types of links in Zoom app').
 Zoom may change its UI, causing this program to stop working.
-Use with caution.
+
+USE WITH CAUTION.
 
 # Platforms
 
@@ -52,9 +53,11 @@ PyWin32 - https://github.com/mhammond/pywin32
 
 # Steps to use
 
-1. Open command prompt and type following command (installing modules - Pyautogui, Openpyxl, Pillow) (this is required only for the first time)
+1. Open a command prompt and type following command (installing modules - Pyautogui, Openpyxl, Pillow, pywin32) 
 
 pip install -r requirements.txt
+
+This is required only for the first time.
 
 Installation of pywin32 may fail on non-Windows systems.
 This is only required for picking up meetings from Outlook and therefore, this feature is not supported on non-Windows platforms.
@@ -64,7 +67,7 @@ The rest of the program should continue to run even without this module.
 
 Time : dd-mm-yyyy hh:mm Meeting ID : 123456123 (string)(not required if meeting link is provided) Meeting Password : 1234 (string)(not required if meeting link is provided) Comment: Example meeting (Optional)
 
-Warning : Please enter as given.
+Please follow the format that is specified.
 
 Or, again optionally, you can use meetings.json and enter the meeting details there.
 
@@ -72,13 +75,13 @@ The program will combine the meetings it obtained from all sources (meetings.xls
 
 3. Run Zoom, WebEx and MS Teams and log in with your username and password, if you want to join as a particular user.
 
-4. Make sure to close all other windows and free up the desktop.
+4. Close all other window and have a clean desktop.
 
 5. Run main.py.
 
-6. Do not close the command prompt where the program is running and watch for any errors that show up.
+6. Do not close the terminal window where the program is running.
 
-Keep an eye out in case of errors and failures.
+Watch the terminal window for error messages.
 
 # Errors
 
@@ -98,6 +101,21 @@ WebEx has similar [functionality](https://help.webex.com/en-us/article/npg35it/W
 
 It is highly advisable to have those enabled and not rely on functionality provided in this app.
 This is because this app uses UI automation, and it will be less reliable than Zoom's or WebEx's own settings.
+
+# Troubleshooting
+
+## Changes in UI elements between machines
+It is possible that the images that are provided in this repository are not matching the UI elements on your machine.
+This could be because of fonts, themes, etc. being different on your machine.
+If the corresponding UI elements are different on your machine, the program might exit with the following error:
+
+`Timeout exceeded while waiting for image <image> to be available. Timeout was <x> seconds`
+
+If you take screenshots of the UI elements presented in the "images" folder and replace them, that should solve this problem.
+
+Unfortunately, it is not that easy to provide all possible versions of these images as part of this project.
+You can also play with the confidence value in the `automator.py` to solve this problem.
+However, if the confidence is too low, it can cause mis-clicks, therefore, this method is not recommended.
 
 # Credit
 
