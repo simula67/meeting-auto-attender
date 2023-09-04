@@ -105,15 +105,17 @@ This is because this app uses UI automation, and it will be less reliable than Z
 # Troubleshooting
 
 ## Changes in UI elements between machines
-It is possible that the images that are provided in this repository are not matching the UI elements on your machine.
-This could be because of fonts, themes, etc. being different on your machine.
+
+Please note that some of the images supplied with this project were taken with "Dark Mode" turned on.
+It is possible that the images that are provided in this repository do not match the UI elements on your machine.
+This could be because of fonts, themes, mode etc. being different on your machine.
 If the corresponding UI elements are different on your machine, the program might exit with the following error:
 
 `Timeout exceeded while waiting for image <image> to be available. Timeout was <x> seconds`
 
-If you take screenshots of the UI elements presented in the "images" folder and replace them, that should solve this problem.
+If you take screenshots of the UI elements provided in the "images" folder and replace them, that should solve this problem.
 
-Unfortunately, it is not that easy to provide all possible versions of these images as part of this project.
+Unfortunately, it is not easy to provide all possible versions of these images as part of this project.
 You can also play with the confidence value in the `automator.py` to solve this problem.
 However, if the confidence is too low, it can cause mis-clicks, therefore, this method is not recommended.
 
