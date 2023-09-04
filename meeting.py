@@ -76,6 +76,8 @@ def join_meetings(meetings, automator):
                   .format(meeting[4], i + 1, MAX_LATENESS_FOR_MEETING / 60))
             continue
 
-        automator.join_meeting(meeting_link=meeting[1], meeting_id=meeting[2],
-                               meeting_password=meeting[3])
-
+        try:
+            automator.join_meeting(meeting_link=meeting[1], meeting_id=meeting[2],
+                                   meeting_password=meeting[3])
+        except Exception as e:
+            logger.error('Cannot join meeting: {}'.format(e))
