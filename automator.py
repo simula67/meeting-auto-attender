@@ -93,7 +93,7 @@ class MSTeamsAutomator:
 
     def join_meeting_with_link(self, meeting_link):
         webbrowser.open(meeting_link)
-        if get_position_from_image('images/msteams_mute.png', timeout=15, confidence=self.confidence):
+        if get_position_from_image('images/msteams_mute.png', timeout=5, confidence=self.confidence):
             locate_and_click('images/msteams_mute.png', timeout=15, confidence=self.confidence)
             locate_and_click('images/msteams_join_meeting.png', confidence=self.confidence)
         else:
