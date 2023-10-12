@@ -59,6 +59,7 @@ def join_meetings(meetings, automator):
     for i, meeting in enumerate(meetings):
         # Setting the meeting times
         current_time = round(time.time(), 0)
+        logger.info('Current date and time is : {}'.format(datetime.datetime.fromtimestamp(current_time).strftime('%Y-%m-%d %H:%M:%S')))
         meeting_time = meeting[0]
 
         # Join sometime early for later scheduled meeting
