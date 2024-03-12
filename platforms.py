@@ -128,6 +128,9 @@ class Windows:
                             meeting_link = search_links_domain(appointment.Body, 'zoom')
                     elif 'microsoft teams meeting' in meeting_link.lower():
                         meeting_link = search_links_text(appointment.Body, 'https%3A%2F%2Fteams.microsoft.com%2Fl%2Fmeetup-join%2F')
+                        if meeting_link is None:
+                            meeting_link = search_links_text(appointment.Body,
+                                                             'https://teams.microsoft.com/l/meetup-join/')
 
 
 
