@@ -4,3 +4,5 @@ urlextract==1.6.0
 validators==0.20.0
 wakepy==0.5.0
 Pillow==9.3
+# Uncomment the following line to use 'Pick meetings from Outlook' feature on Windows
+#pywin32==306

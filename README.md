@@ -53,11 +53,14 @@ PyWin32 - https://github.com/mhammond/pywin32
 
 # Steps to use
 
-1. Open a command prompt and type following command (installing modules - Pyautogui, Openpyxl, Pillow, pywin32) 
+1. Open a command prompt and type following command (installing modules - Pyautogui, Openpyxl, Pillow, pywin32)
+
+(Please note that you need to uncomment the `pywin32==306` line from requirements.txt for using the 'Pick meetings from Outlook' feature on Windows.)
 
 pip install -r requirements.txt
 
-This is required only for the first time.
+This is command only needs to be run once, during setup.
+Afterward, run the `main.py` file as mentioned in step 5 to use the script over and over again. 
 
 Installation of pywin32 may fail on non-Windows systems.
 This is only required for picking up meetings from Outlook and therefore, this feature is not supported on non-Windows platforms.
@@ -73,7 +76,7 @@ Or, again optionally, you can use meetings.json and enter the meeting details th
 
 The program will combine the meetings it obtained from all sources (meetings.xlsx, meetings.json and Outlook)
 
-3. Run Zoom, WebEx and MS Teams and log in with your username and password, if you want to join as a particular user.
+3. Run Zoom, WebEx and MS Teams. Log in with your username and password, if you want to join meetings as a particular user.
 
 4. Close all other window and have a clean desktop.
 
