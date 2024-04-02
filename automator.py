@@ -15,12 +15,20 @@ pyautogui.FAILSAFE = True
 logger = logging.getLogger('AUTOMATOR')
 
 
+def locate_on_screen(image, confidence):
+    try:
+        return pyautogui.locateOnScreen(image, confidence=confidence)
+    except Exception as e:
+        logger.error('Image ({}) not found. Confidence: {}'.format(image, confidence))
+        return None
+
+
 def get_position_from_image(image, timeout=60, confidence=0.9):
     position = None
     seconds_spent = 0
     while position is None:
         if seconds_spent < timeout:
-            position = pyautogui.locateOnScreen(image, confidence=confidence)
+            position = locate_on_screen(image, confidence=confidence)
             if position is None:
                 logger.info('Waiting for image \'{}\' to be available. '
                             'Timeout is {} seconds, time spent is: {} seconds'
@@ -117,8 +125,8 @@ class ZoomAutomator:
     def mute_mic(self):
         # check whether the mic is muted, if not mute it
         pyautogui.moveTo(x=900, y=900, duration=0.25)
-        if pyautogui.locateOnScreen('images/mute.png', confidence=self.confidence) is not None:
-            mute_button = pyautogui.locateOnScreen('images/mute.png', confidence=self.confidence)
+        if locate_on_screen('images/mute.png', confidence=self.confidence) is not None:
+            mute_button = locate_on_screen('images/mute.png', confidence=self.confidence)
             pyautogui.click(mute_button)
 
     def join_meeting_with_link(self, meeting_link):
@@ -135,9 +143,9 @@ class ZoomAutomator:
         meeting_joined = False
         while not meeting_joined:
             logger.info('Checking if Zoom was opened')
-            launch_meeting = pyautogui.locateOnScreen('images/launchmeeting.png', confidence=self.confidence)
-            leave_meeting = pyautogui.locateOnScreen('images/leave.png', confidence=self.confidence)
-            end_meeting = pyautogui.locateOnScreen('images/end.png', confidence=self.confidence)
+            launch_meeting = locate_on_screen('images/launchmeeting.png', confidence=self.confidence)
+            leave_meeting = locate_on_screen('images/leave.png', confidence=self.confidence)
+            end_meeting = locate_on_screen('images/end.png', confidence=self.confidence)
             if leave_meeting is not None or end_meeting is not None:
                 logger.info('Joined meeting')
                 meeting_joined = True
@@ -154,7 +162,7 @@ class ZoomAutomator:
         time.sleep(3)
         # locating the Zoom app
         while True:
-            zoom_app = pyautogui.locateOnScreen('images/final.png', confidence=self.confidence)
+            zoom_app = locate_on_screen('images/final.png', confidence=self.confidence)
             if zoom_app is not None:
                 pyautogui.click(zoom_app)
                 break
@@ -170,11 +178,11 @@ class ZoomAutomator:
         pyautogui.typewrite(meeting_id)
 
         # disabling video source
-        video_off = pyautogui.locateOnScreen('images/videooff.png', confidence=self.confidence)
+        video_off = locate_on_screen('images/videooff.png', confidence=self.confidence)
         pyautogui.click(video_off)
 
         # clicking the join button
-        join_meeting_button = pyautogui.locateOnScreen('images/join.png', confidence=self.confidence)
+        join_meeting_button = locate_on_screen('images/join.png', confidence=self.confidence)
         join_meeting_button = (
             join_meeting_button[0] + 75, join_meeting_button[1] + 10, join_meeting_button[2], join_meeting_button[3])
         pyautogui.moveTo(pyautogui.center(join_meeting_button))
@@ -183,20 +191,20 @@ class ZoomAutomator:
         time.sleep(3)
 
         # checking and entering if meeting password is enabled
-        if pyautogui.locateOnScreen('images/password.png', confidence=self.confidence) is not None:
+        if locate_on_screen('images/password.png', confidence=self.confidence) is not None:
             pyautogui.typewrite(meeting_password)
-            join_meeting_button = pyautogui.locateOnScreen('images/joinmeeting.png', confidence=0.9)
+            join_meeting_button = locate_on_screen('images/joinmeeting.png', confidence=0.9)
             pyautogui.click(join_meeting_button)
 
         time.sleep(5)
         # check whether the meeting has started and join with 'enableaudio'
         while True:
-            if pyautogui.locateOnScreen('images/audioenable.png', confidence=self.confidence) is not None:
-                join_with_audio = pyautogui.locateOnScreen('images/audioenable.png', confidence=0.9)
+            if locate_on_screen('images/audioenable.png', confidence=self.confidence) is not None:
+                join_with_audio = locate_on_screen('images/audioenable.png', confidence=0.9)
                 pyautogui.click(join_with_audio)
                 break
-            elif pyautogui.locateOnScreen('images/leave.png', confidence=self.confidence) is not None:
-                leave_button = pyautogui.locateOnScreen('images/leave.png', confidence=0.9)
+            elif locate_on_screen('images/leave.png', confidence=self.confidence) is not None:
+                leave_button = locate_on_screen('images/leave.png', confidence=0.9)
                 pyautogui.click(leave_button)
                 break
             elif (time.time() - cur) >= 30 * 60:

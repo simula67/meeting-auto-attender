@@ -81,4 +81,4 @@ def join_meetings(meetings, automator):
             automator.join_meeting(meeting_link=meeting[1], meeting_id=meeting[2],
                                    meeting_password=meeting[3])
         except Exception as e:
-            logger.error('Cannot join meeting: {}'.format(e))
+            logger.error('Cannot join meeting: {} (Exception type is: {})'.format(e, str(type(e))))
