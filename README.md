@@ -33,7 +33,7 @@ Comment: Example meeting (string)
 Please refer the example in meetings.xlsx or meetings.json.
 
 These example meetings should get skipped when the program is run since they started a long time ago.
-There is no need to remove them from these files, as long as MAX_LATENESS_FOR_MEETING is not changed in meeting.py.
+There is no need to remove them from these files, as long as MAX_LATENESS_FOR_MEETING is not changed in constants.py.
 
 # Modules used
 
